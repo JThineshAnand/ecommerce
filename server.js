@@ -5,7 +5,11 @@ var User = require('./models/users')
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var engine = require('ejs-mate');
-
+var mainRoutes = require('./routes/main');
+var userRoutes = require('./routes/user');
+var session = require('express-session');
+var flash = require('express-flash');
+var cookieParser = require('cookie-parser');
 
 
 mongoose.connect('mongodb://cja:cja@ds117878.mlab.com:17878/ecommerce',function(err){
@@ -20,34 +24,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.engine('ejs',engine);
 app.set('view engine','ejs');
+app.use(session({
+  resave:true,
+  saveUninitialized:true,
+  secret:"Anand"
+}));
 
-app.get('/',function(req,res){
-  res.render('mains/home');
-});
+app.use(flash());
+app.use(mainRoutes);
+app.use(userRoutes);
 
-app.get('/about',function(req,res){
-  res.render('mains/about');
-});
-
-app.post('/create-user',function(req,res,next){
-
-  var user = new User();
-  user.profile.name = req.body.name;
-  user.email = req.body.email;
-  user.password = req.body.password;
-  user.save(function(err){
-    if(err)
-    return next(err);
-    res.json("New User created");
-  });
-
-});
-
-
-
-
-
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 app.listen(port,function(err){
   if(err)
   throw err;
