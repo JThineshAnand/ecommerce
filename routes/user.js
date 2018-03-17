@@ -65,13 +65,18 @@ router.post('/signup', function(req, res, next) {
 });
 
 router.get('/update-profile',function(req,res){
-  res.render('accounts/update-profile',{success:req.flash('success')});
+  res.render('accounts/update-profile',{success:req.flash('success'), failure:req.flash('failure')});
 });
 
 router.post('/update-profile', function(req,res,next){
   User.findOne({_id:req.user._id}, function(err,user){
     if(err) return next(err);
+    if(req.body.name ===''){
+      req.flash('failure','Name cannot be Blank');
+      return res.redirect('/update-profile');
+    }
     user.profile.name = req.body.name;
+
     user.profile.address = req.body.address;
     user.save(function(err,user){
       if(err) return next(err);
