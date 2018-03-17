@@ -1,0 +1,17 @@
+<% layout('layout') -%>
+<div class=container>
+  <div class=row>
+    <div class='col-sm-4 col-md-6'>
+      <img class ='img-circle img-responsive img-center' src = "<%= user.profile.picture %>" alt =''>
+      <p>Name: <%= user.profile.name %></p>
+      <p>Email: <%= user.email %></p>
+
+      <% if(user.profile.address === "" || typeof user.profile.address === 'undefined') { } else { %>
+          <p>Address: <%= user.profile.address %></p>
+          <% } %>
+
+
+      <button class="btn btn-success"><a href ='/update-profile'>Update></a></button>
+    </div>
+  </div>
+</div>

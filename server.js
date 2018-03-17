@@ -10,12 +10,16 @@ var userRoutes = require('./routes/user');
 var session = require('express-session');
 var flash = require('express-flash');
 var cookieParser = require('cookie-parser');
+var secret = require('./config/config');
+var MongoStore = require('connect-mongo')(session);
+var passport = require('passport');
 
+mongoose.connect(secret.database).then(()=>{
+  console.log('DB connected');
+},err =>{
+  console.log('Cannot connect to DB')
+});
 
-mongoose.connect('mongodb://cja:cja@ds117878.mlab.com:17878/ecommerce',function(err){
-  if(err) throw err;
-  else console.log('Database Connected');
-})
 
 var app = express();
 app.use(morgan('dev'));
@@ -28,17 +32,23 @@ app.use(cookieParser());
 app.use(session({
   resave:true,
   saveUninitialized:true,
-  secret:"Anand"
+  secret:secret.secretKey, 
+  store: new MongoStore({url:secret.database, autoReconnect:true})
 }));
-
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(function(req,res,next){
+  res.locals.user = req.user;
+  next();
+});
 app.use(flash());
 app.use(mainRoutes);
 app.use(userRoutes);
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || secret.port;
 app.listen(port,function(err){
   if(err)
-  throw err;
+    throw err;
   else
-  console.log(`Server is running on ${port}`)
+    console.log(`Server is running on ${port}`)
 });
