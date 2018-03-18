@@ -5,6 +5,12 @@ router.get('/add-category',function(req,res,next){
   res.render('admin/add-category',{success:req.flash('success'), failure:req.flash('failure')});
 });
 
+router.get('/add-products',function(req,res,next){
+  Category.find({},function(err,categories){
+    res.render('admin/add-products',{categories:categories, success: req.flash('success')});
+  });
+
+});
 
 router.post('/add-category',function(req,res,next){
 
@@ -22,6 +28,7 @@ router.post('/add-category',function(req,res,next){
         if(err)
           return next(err);
         req.flash('success','Successfully added a new Category');
+        //res.redirect(`/api/${req.body.categoryName}/${req.body.numberofItems}`)
         return res.redirect('/add-category');
       });
     }

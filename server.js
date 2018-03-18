@@ -7,6 +7,7 @@ var ejs = require('ejs');
 var engine = require('ejs-mate');
 var mainRoutes = require('./routes/main');
 var userRoutes = require('./routes/user');
+var apiRoutes = require('./api/faker');
 var adminRoutes = require('./routes/admin');
 var session = require('express-session');
 var flash = require('express-flash');
@@ -58,6 +59,7 @@ app.use(flash());
 app.use(mainRoutes);
 app.use(userRoutes);
 app.use(adminRoutes);
+app.use('/api',apiRoutes);
 
 var port = process.env.PORT || secret.port;
 app.listen(port,function(err){
