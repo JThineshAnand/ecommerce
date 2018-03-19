@@ -34,3 +34,28 @@
       });
     });
   });
+
+
+
+  $(document).on('click','#add',function(){
+    var quantity = parseInt($('#quantity').val());
+    var price = parseInt($('#priceHidden').val());
+    var quantity = quantity +1;
+    var totalprice = parseInt($('#totalPrice').val());
+    totalprice = totalprice + price;
+    $('#quantity').val(quantity);
+    $('#total').html(quantity);
+    $('#totalPrice').val(totalprice);
+  });
+
+  $(document).on('click','#minus',function(){
+    var quantity = parseInt($('#quantity').val());
+    if(quantity !=1){
+    var price = parseInt($('#priceHidden').val());
+    var quantity = quantity  - 1;
+    var totalprice = parseInt($('#totalPrice').val());
+    totalprice = totalprice - price;
+    $('#quantity').val(quantity);
+    $('#total').html(quantity);
+    $('#totalPrice').val(totalprice);}
+  });

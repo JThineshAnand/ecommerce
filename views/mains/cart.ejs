@@ -1,0 +1,47 @@
+<% layout('layout') -%>
+<div class='container'>
+  <div class='row'>
+    <div class='col-lg-6'>
+      <% if (success.length > 0) { %>
+        <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismmiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <%= success %>
+        </div>
+      <% } %>
+
+      <% for( var i =0;i< foundCart.items.length;i++) { %>
+          <div class='list-group'>
+            <span class='list-group-item'>
+              <div class='row'>
+                <div class='col-md-3'>
+                  <span><img id='productImage' src='<%= foundCart.items[i].item.image %>'></img></span>
+                </div>
+                <div class='col-md-3'>
+                  <p class='list-group-item-heading'><%= foundCart.items[i].item.name %></p>
+                </div>
+                <div class='col-md-3'>
+                </div>
+                <div class='col-md-3'>
+                  <p><%= foundCart.items[i].quantity %></p>
+                  <p><%= foundCart.items[i].price %></p>
+                  <form method="POST" action='/remove'>
+                    <input type='hidden' value ='<%= foundCart.items[i]._id %>' name='item'></input>
+                    <input type='hidden' value='<%= foundCart.items[i].item.price %>' name='price'></input>
+                    <button class='btn btn-default' type='submit'>Remove</button>
+                  </form>
+                </div>
+
+              </div>
+            </span>
+
+          </div>
+      <% } %>
+
+  </div>
+
+  <div class='3'></div>
+  <div class='3'></div>
+  </div>
+</div>

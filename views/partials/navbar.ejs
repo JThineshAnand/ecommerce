@@ -38,11 +38,23 @@
       <li><a href ='/signup' class="dropdown-toggle" data-toggle="dropdown"><%= user.profile.name %></a>
         <ul class="dropdown-menu">
           <li><a href ='/profile'>Profile</a>
+            <li><a href ='/add-category'>Add new Category</a>
+              <li><a href ='/add-products'>Add new Product</a>
+
           <li><a href ='/update-profile'>Update Profile</a>
           <li><a href ='/logout'>Logout</a>
         </ul>
 
     <% } %>
+    <% if(user) { %>
+      <li><a href='/cart' class='glyphicon glyphicon-shopping-cart'><span class ='badge'><%= cart %></span></a></li>
+
+    <% } else { %>
+      <li><a href='/cart' class='glyphicon glyphicon-shopping-cart'><span class ='badge'>0</span></a></li>
+
+    <% } %>
+
+
     </ul>
   </div>
 </nav>

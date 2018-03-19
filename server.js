@@ -16,6 +16,7 @@ var secret = require('./config/config');
 var MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
 var Category = require('./models/category');
+var cartLength = require('./middlewares/middlewares');
 
 mongoose.connect(secret.database).then(()=>{
   console.log('DB connected');
@@ -44,6 +45,7 @@ app.use(function(req,res,next){
   res.locals.user = req.user;
   next();
 });
+app.use(cartLength);
 
 app.use(function(req,res,next){
   Category.find({},function(err,categories){
