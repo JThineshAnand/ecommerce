@@ -37,4 +37,18 @@ router.post('/add-products',function(req,res,next){
   return res.redirect('/add-products');
 });
 
+
+router.post('/search', function(req,res,next){
+  Product.search({
+    query_string:{query:req.body.searchterm}
+  },function(err,results){
+    if(err) return next(err);
+    var data = results.hits.hits.map(function(hit){
+      return hit._source;
+    });
+    console.log(data);
+    res.json(data);
+  });
+});
+
 module.exports = router;

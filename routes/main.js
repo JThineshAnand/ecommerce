@@ -35,7 +35,7 @@ function paginate(req,res,next){
     .populate('category')
     .exec(function(err, products){
       if(err) return next(err);
-      console.log(products);
+      //console.log(products);
       Product.count().exec(function(err,count){
         if(err) return next(err);
         else {
