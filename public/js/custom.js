@@ -33,9 +33,12 @@
         }
       });
     });
+  var stripe=Stripe('pk_test_E2czI7XaqiZDIzlSqvYJYS5p');
+
+
+  $(document).ready(function(){
+    $('#hiddendiv').hide();
   });
-
-
 
   $(document).on('click','#add',function(){
     var quantity = parseInt($('#quantity').val());
@@ -46,6 +49,10 @@
     $('#quantity').val(quantity);
     $('#total').html(quantity);
     $('#totalPrice').val(totalprice);
+  });
+
+$('#stripepaybutton').click(function(){
+    $('#hiddendiv').show(1000);
   });
 
   $(document).on('click','#minus',function(){
@@ -59,3 +66,43 @@
     $('#total').html(quantity);
     $('#totalPrice').val(totalprice);}
   });
+
+
+
+  function stripeResponseHandler(status, response) {
+  // Grab the form:
+  var $form = $('#payment-form');
+  if (response.error) { // Problem!
+
+    // Show the errors on the form:
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('.submit').prop('disabled', false); // Re-enable submission
+
+  } else { // Token was created!
+
+    // Get the token ID:
+    var token = response.id;
+
+    // Insert the token ID into the form so it gets submitted to the server:
+    $form.append($('<input type="hidden" name="stripeToken">').val(token));
+
+    // Submit the form:
+    $form.get(0).submit();
+  }
+};
+
+
+$('#payment-form').submit(function(event) {
+
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true);
+    console.log(stripe);
+
+    stripe.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from submitting with the default action
+    return false;
+  });
+});

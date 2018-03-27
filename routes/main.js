@@ -185,6 +185,8 @@ router.post('/payment',function(req,res,next){
       customer:customer.id
     });
 
+    res.redirect('/profile');
+
   });
 });
 
