@@ -2,7 +2,9 @@ var router = require('express').Router();
 var Product = require('../models/product');
 var Cart = require('../models/cart');
 var async = require('async');
-var stripe = require('stripe')('sk_test_NiBZ0DWQkolmuO3Do23qcJNs');
+
+
+
 
 router.get('/cart',function(req,res,next){
   // Cart.findOne({owner:req.user._id}).populate('items.item')
@@ -169,24 +171,6 @@ router.post('/remove',function(req,res,next){
       req.flash('success','Successfully removed from the cart');
       res.redirect('/cart');
     });
-  });
-});
-
-
-router.post('/payment',function(req,res,next){
-  var stripeToken = req.body.stripeToken;
-  var stripeMoney = Math.round(req.body.stripeMoney * 100);
-  stripe.customers.create({
-    source: stripeToken
-  }).then(function(customer){
-    return stripe.charges.create({
-      amount:stripeMoney,
-      currency: 'usd',
-      customer:customer.id
-    });
-
-    res.redirect('/profile');
-
   });
 });
 
