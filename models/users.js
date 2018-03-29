@@ -2,6 +2,7 @@ var {Schema} = require('mongoose');
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var crypto =require('crypto');
+var Product = require('./product');
 
 var UserSchema = new Schema({
   email:{
@@ -34,7 +35,10 @@ var UserSchema = new Schema({
     paid:{
       type:Number,
       default:0
-    }
+    },
+
+    quantity:{type:Number,default:0},
+    item:{type: Schema.Types.ObjectId, ref:'Product'}
   }]
 });
 

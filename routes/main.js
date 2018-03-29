@@ -1,10 +1,59 @@
 var router = require('express').Router();
 var Product = require('../models/product');
+var User = require('../models/users');
 var Cart = require('../models/cart');
 var async = require('async');
+var stripe = require('stripe')('sk_test_NiBZ0DWQkolmuO3Do23qcJNs');
+
+router.post('/payment', function(req,res,next){
+  var stripeToken = req.body.stripeToken;
+  var stripeCharges = Math.round(req.body.stripeMoney *100);
+  stripe.customers.create(
+  { source: stripeToken }).then(function(customer){
+    return stripe.charges.create({
+      customer: customer.id,
+      amount: stripeCharges,
+      currency:'usd'
+    });
+  }).then(function(charge){
+    async.waterfall([
+      function(callback){
+          Cart.findOne({owner:req.user._id},function(err,cart){
+            if(err) return next(err);
+            console.log(cart);
+            callback(null,cart);
+          });
+      },
+      function(cart,callback){
+        User.findOne({_id:req.user._id},function(err,user){
+          if(err) return next(err);
+          for(var i =0;i<cart.items.length;i++){
+            user.history.push({
+              date:new Date(),
+              item: cart.items[i].item,
+              quantity: cart.items[i].quantity,
+              paid: cart.items[i].price
+            });
+          }
+          console.log(user.history);
+            user.save(function(err,user){
+              if (err) return next(err);
+              callback(null,user);
+            });
+        });
+      },
+      function(user){
+          Cart.update({owner:user._id},{$set:{ items:[],total:0}},function(err,updated){
+            if(updated){
+              res.redirect('/profile');
+            }
+          });
+      }
+    ])
+  });
 
 
-
+});
 
 router.get('/cart',function(req,res,next){
   // Cart.findOne({owner:req.user._id}).populate('items.item')
@@ -21,7 +70,7 @@ router.get('/cart',function(req,res,next){
 
     },
     function(cart){
-      console.log(cart);
+      //console.log(cart);
       res.render('mains/cart',{foundCart:cart,success:req.flash('success')});
     }
   ]);

@@ -33,7 +33,7 @@
         }
       });
     });
-  
+
   $(document).on('click','#add',function(){
     var quantity = parseInt($('#quantity').val());
     var price = parseInt($('#priceHidden').val());
@@ -58,5 +58,43 @@
     $('#total').html(quantity);
     $('#totalPrice').val(totalprice);}
   });
+Stripe.setPublishableKey('pk_test_E2czI7XaqiZDIzlSqvYJYS5p');
+
+  function stripeResponseHandler(status, response) {
+
+  // Grab the form:
+  var $form = $('#payment-form');
+
+  if (response.error) { // Problem!
+
+    // Show the errors on the form
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('button').prop('disabled', false); // Re-enable submission
+
+  } else { // Token was created!
+
+    // Get the token ID:
+    var token = response.id;
+
+    // Insert the token into the form so it gets submitted to the server:
+    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+
+    // Submit the form:
+    $form.get(0).submit();
+
+  }
+}
+$('#payment-form').submit(function(event) {
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true);
+
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from submitting with the default action
+    return false;
+  });
+
 
 });
