@@ -59,7 +59,28 @@
     $('#totalPrice').val(totalprice);}
   });
 Stripe.setPublishableKey('pk_test_E2czI7XaqiZDIzlSqvYJYS5p');
-
+var opts = {
+    lines: 12,
+    length: 7,
+    width: 5,
+    radius: 10,
+    scale: 1.0,
+    corners: 1,
+    color: '#F0F0',
+    fadeColor: 'transparent',
+    opacity: 0.25,
+    rotate: 0,
+    direction: 1,
+    speed: 1,
+    trail: 100,
+    fps: 20,
+    zIndex: 2e9,
+    className: 'spinner',
+    top: '50%',
+    left: '50%',
+    shadow: 'none',
+    position: 'absolute',
+};
   function stripeResponseHandler(status, response) {
 
   // Grab the form:
@@ -80,6 +101,8 @@ Stripe.setPublishableKey('pk_test_E2czI7XaqiZDIzlSqvYJYS5p');
     $form.append($('<input type="hidden" name="stripeToken" />').val(token));
 
     // Submit the form:
+    var spinner = new Spinner(opts).spin();
+    $('#loading').append(spinner.el);
     $form.get(0).submit();
 
   }

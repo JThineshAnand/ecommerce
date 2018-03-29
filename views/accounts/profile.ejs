@@ -13,5 +13,23 @@
 
       <a class="btn btn-primary btn-lg"href='/update-profile'>Update</a>
     </div>
+    <div class='col-lg-6'>
+      <table class='table table-striped'>
+        <thead>
+          <td>Item Name</td>
+          <td>Quantity</td>
+          <td>Price</td>
+          <td>Paid</td>
+        </thead>
+        <% for(var i = 0; i< foundUser.history.length;i++){ %>
+        <tr>
+          <td><%= foundUser.history[i].item.name %></td>
+          <td><%= foundUser.history[i].quantity %></td>
+          <td><%= foundUser.history[i].item.price %></td>
+          <td><%= foundUser.history[i].paid %></td>
+        </tr>
+        <% } %>
+      </table>
+    </div>
   </div>
 </div>

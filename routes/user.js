@@ -11,12 +11,12 @@ router.get('/signup', function(req, res, next) {
   });
 });
 
-router.get('/profile',function(req,res,next){
-  User.findOne({_id:req.user._id}, function(err,user){
-    if(user)
-      return res.render('accounts/profile', { user:req.user});
-    console.log('Cant find user');
-    return next(err);
+router.get('/profile', passportConfig.isAuthenticated, function(req,res,next){
+  User.findOne({_id:req.user._id})
+    .populate('history.item')
+    .then(function(foundUser){
+    if(foundUser)
+      return res.render('accounts/profile', { foundUser:foundUser});
   });
 });
 

@@ -30,7 +30,7 @@ passport.use('local-login', new LocalStrategy({
 
 
 exports.isAuthenticated = function(req,res,next){
-  if(req.user.isAuthenticated())
+  if(req.user)
     return next();
   return res.redirect('/login');
 }
