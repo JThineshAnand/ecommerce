@@ -20,6 +20,13 @@ router.get('/profile', passportConfig.isAuthenticated, function(req,res,next){
   });
 });
 
+router.get('/auth/facebook',
+  passport.authenticate('facebook',{scope:'email'}));
+
+router.get('/auth/facebook/callback',
+  passport.authenticate('facebook', {
+  successRedirect: '/profile',
+  failureRedirect: '/login' }),);
 
 router.get('/login', function(req, res, next) {
   if(req.user) return res.redirect('/profile');

@@ -14,6 +14,8 @@ var UserSchema = new Schema({
     type:String,
     //required:true
   },
+  facebook:String,
+  tokens:Array,
   profile:{
     name:{
       type:String,
